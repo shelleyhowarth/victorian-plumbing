@@ -10,6 +10,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { green } from "@mui/material/colors";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Rating from "@mui/material/Rating";
+import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 
 const ItemCard = (item: ItemCardProps) => {
   const inStockCheckbox = (stockStatus: string, stockEta: string | null) => {
@@ -36,39 +38,45 @@ const ItemCard = (item: ItemCardProps) => {
   };
 
   return (
-    <div>
-      <Card variant="outlined" sx={{ minWidth: 275 }}>
+    <Grid xs={6} sm={4} md={3}>
+      <Card
+        variant="outlined"
+        sx={{ minWidth: "30%", width: "100%", height: "100%" }}
+      >
         <React.Fragment>
-          <CardMedia
-            sx={{ height: 150, width: 150 }}
-            image={item.itemImageUrl}
-          />
-          <CardMedia
-            sx={{ height: 20, width: 80 }}
-            image={item.brandImageUrl}
-          />
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 16 }}
-              color="text.primary"
-              gutterBottom
-              noWrap
-            >
-              {item.productName}
-            </Typography>
-            <Typography sx={{ mb: 1.5, fontWeight: "bold" }} color="red">
-              £{item.priceIncTax}
-            </Typography>
-            {inStockCheckbox(item.stockStatus, item.stockEta)}
-            <Rating value={item.averageRating} readOnly precision={0.1}/>
-            <Typography>{item.reviewsCount}</Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
+          <CardMedia sx={{ height: 250 }} image={item.itemImageUrl} />
+          <Stack>
+            <CardMedia
+              sx={{ height: 20, width: 80 }}
+              image={item.brandImageUrl}
+            />
+            <CardContent>
+              <Typography
+                sx={{ fontSize: 16 }}
+                color="text.primary"
+                gutterBottom
+                noWrap
+              >
+                {item.productName}
+              </Typography>
+              <Stack direction="row" spacing={2}>
+                <Typography sx={{ mb: 1.5, fontWeight: "bold" }} color="red">
+                  £{item.priceIncTax}
+                </Typography>
+                {inStockCheckbox(item.stockStatus, item.stockEta)}
+              </Stack>
+              <Stack direction="row" spacing={2}>
+                <Rating value={item.averageRating} readOnly precision={0.1} />
+                <Typography>{item.reviewsCount}</Typography>
+              </Stack>
+              <Typography sx={{ fontSize: 16 }}>
+                {item.isRecommended ? 'Recommended' : ''}
+              </Typography>
+            </CardContent>
+          </Stack>
         </React.Fragment>
       </Card>
-    </div>
+    </Grid>
   );
 };
 

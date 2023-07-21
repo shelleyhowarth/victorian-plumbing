@@ -14,4 +14,5 @@ export interface ItemCardProps {
     brandImageAltText: string;
     stockStatus: string;
     stockEta: string | null;
+    isRecommended: boolean;
   }

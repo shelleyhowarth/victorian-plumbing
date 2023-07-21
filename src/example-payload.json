@@ -489,7 +489,7 @@
                     "isBestSeller": true,
                     "isFreeWaste": false,
                     "isPremium": false,
-                    "isRecommended": false,
+                    "isRecommended": true,
                     "isTrayIncluded": false,
                     "isBluetoothIncluded": false,
                     "isBatteryIncluded": false,

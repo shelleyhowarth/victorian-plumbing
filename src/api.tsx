@@ -9,7 +9,7 @@ const config: Params = {
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
-  method: "get",
+  method: "post",
 };
 
 export const getProducts = async (data: any): Promise<any> => {
