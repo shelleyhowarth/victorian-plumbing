@@ -1,27 +1,42 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import ItemCard from "./components/ItemCard/ItemCard";
-import { getProducts } from "./api";
+import data from "./example-payload.json";
+import { ItemCardProps } from "./types";
 
 function App() {
-  const [data, setData] = React.useState([]); 
+  
+  const transformDataItemToItemCardProps = (item: any) => {
+    return {
+      id: item.id,
+      productName: item.productName,
+      itemImageUrl: item.image.url,
+      itemImageAltText: item.image.attributes.imageAltText,
+      averageRating: item.averageRating,
+      reviewsCount: item.reviewsCount,
+      wasPriceIncTax: item.price.wasPriceIncTax,
+      priceIncTax: item.price.priceIncTax,
+      isOnPromotion: item.price.isOnPromotion,
+      discountPercentage: item.price.discountPercentage,
+      isBestSeller: item.attributes.isBestSeller,
+      brandImageUrl: item.brand.brandImage.url,
+      brandImageAltText: item.brand.brandImage.attributes.imageAltText,
+      stockStatus: item.stockStatus.status,
+      stockEta: item.stockStatus.eta,
+    };
+  };
 
-  const getData = () =>
-    getProducts({}).then((res) => {
-      if (res.status === 200) {
-        setData(res.data);
-        console.log(data);
-      } else {
-        console.log(res);
-      }
-    });
+  const arrayCardItems = data.item.products.map((item) => {
+    const itemCardObj: ItemCardProps = transformDataItemToItemCardProps(item);
 
-  useEffect(() => {
-    getData();
-  }, []);
+    return (
+      <ItemCard {...itemCardObj}/>
+    )
+  });
+
   return (
     <div className="App">
-      <ItemCard />
+      {arrayCardItems}
     </div>
   );
 }
