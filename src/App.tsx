@@ -1,86 +1,41 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import ItemCard from "./components/ItemCard/ItemCard";
 import data from "./example-payload.json";
-import { ItemCardProps } from "./types";
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { getProducts } from "./api";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import ItemGrid from "./components/ItemGrid/ItemGrid";
 
 function App() {
-  // const [apiData, setApiData] = React.useState([]);
-
-  // const getData = () =>
-  //   getProducts({}).then((res) => {
-  //     if (res.status === 200) {
-  //       setApiData(res.data);
-  //       console.log(data);
-  //     } else {
-  //       console.log(res);
-  //     }
-  //   });
-
-  // React.useEffect(() => {
-  //   getData();
-  // }, []);
-
   const [sortBy, setSortBy] = useState("recommended");
   const [fetchedData, setFetchedData] = useState(data);
 
   useEffect(() => {
-    fetchedData.item.products.sort(function (x, y) {
-      return x.attributes.isRecommended === y.attributes.isRecommended
-        ? 0
-        : x.attributes.isRecommended
-        ? -1
-        : 1;
-    });
-    console.log(fetchedData);
     sortCardItems();
-  }, [sortBy]);
+  }, [fetchedData]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSortBy(event.target.value as string);
+    sortCardItems();
   };
-
-  const transformDataItemToItemCardProps = (item: any) => {
-    return {
-      id: item.id,
-      productName: item.productName,
-      itemImageUrl: item.image.url,
-      itemImageAltText: item.image.attributes.imageAltText,
-      averageRating: item.averageRating,
-      reviewsCount: item.reviewsCount,
-      wasPriceIncTax: item.price.wasPriceIncTax,
-      priceIncTax: item.price.priceIncTax,
-      isOnPromotion: item.price.isOnPromotion,
-      discountPercentage: item.price.discountPercentage,
-      isBestSeller: item.attributes.isBestSeller,
-      brandImageUrl: item.brand.brandImage.url,
-      brandImageAltText: item.brand.brandImage.attributes.imageAltText,
-      stockStatus: item.stockStatus.status,
-      stockEta: item.stockStatus.eta,
-      isRecommended: item.attributes.isRecommended,
-    };
-  };
-
-  const arrayCardItems = fetchedData.item.products.map((item) => {
-    const itemCardObj: ItemCardProps = transformDataItemToItemCardProps(item);
-
-    return <ItemCard {...itemCardObj} />;
-  });
 
   const sortCardItems = () => {
     // Clone the products array before sorting to avoid mutating the original state
     const sortedProducts = [...fetchedData.item.products];
 
-    if (sortBy === "lowestPrice") {
+    if (sortBy === "recommended") {
+      sortedProducts.sort(function (x, y) {
+        return x.attributes.isRecommended === y.attributes.isRecommended
+          ? 0
+          : x.attributes.isRecommended
+          ? -1
+          : 1;
+      });
+    } else if (sortBy === "lowestPrice") {
       sortedProducts.sort((a, b) => a.price.priceIncTax - b.price.priceIncTax);
     } else if (sortBy === "highestPrice") {
       sortedProducts.sort((a, b) => b.price.priceIncTax - a.price.priceIncTax);
@@ -99,14 +54,14 @@ function App() {
           return 1;
         }
         return 0;
-      })
+      });
     }
 
     setFetchedData((prevData) => ({
       ...prevData,
       item: { ...prevData.item, products: sortedProducts },
     }));
-  }
+  };
 
   return (
     <>
@@ -129,11 +84,7 @@ function App() {
           </FormControl>
         </Box>
 
-        <Box sx={{ m: 2 }}>
-          <Grid container spacing={4}>
-            {arrayCardItems}
-          </Grid>
-        </Box>
+        {fetchedData && <ItemGrid items={fetchedData.item.products}/>}
       </Container>
     </>
   );
