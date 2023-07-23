@@ -64,9 +64,9 @@ function App() {
   };
 
   return (
-    <>
+    <Box sx={{backgroundColor: "#F2F0EA"}}>
       <CssBaseline />
-      <Container>
+      <Container sx={{padding: 10}}>
         <Box sx={{ maxWidth: "30%" }}>
           <FormControl fullWidth>
             <InputLabel>Sort By</InputLabel>
@@ -75,6 +75,7 @@ function App() {
               value={sortBy}
               label="Sort By"
               onChange={handleChange}
+              sx={{backgroundColor: 'white'}}
             >
               <MenuItem value={"recommended"}>Recommended</MenuItem>
               <MenuItem value={"lowestPrice"}>Lowest Price</MenuItem>
@@ -86,7 +87,7 @@ function App() {
 
         {fetchedData && <ItemGrid items={fetchedData.item.products}/>}
       </Container>
-    </>
+    </Box>
   );
 }
 
