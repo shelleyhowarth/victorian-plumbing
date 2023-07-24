@@ -9,6 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ItemGrid from "./components/ItemGrid/ItemGrid";
+import Grid from "@mui/material/Grid"; // Import the Grid component
+import FilterPanel from "./components/FilterPanel/FilterPanel";
 
 function App() {
   const [sortBy, setSortBy] = useState("recommended");
@@ -24,7 +26,6 @@ function App() {
   };
 
   const sortCardItems = () => {
-    // Clone the products array before sorting to avoid mutating the original state
     const sortedProducts = [...fetchedData.item.products];
 
     if (sortBy === "recommended") {
@@ -64,27 +65,37 @@ function App() {
   };
 
   return (
-    <Box sx={{backgroundColor: "#F2F0EA"}}>
+    <Box sx={{ backgroundColor: "#F2F0EA" }}>
       <CssBaseline />
-      <Container sx={{padding: 10}}>
-        <Box sx={{ maxWidth: "30%" }}>
-          <FormControl fullWidth>
-            <InputLabel>Sort By</InputLabel>
-            <Select
-              value={sortBy}
-              label="Sort By"
-              onChange={handleChange}
-              sx={{backgroundColor: 'white'}}
-            >
-              <MenuItem value={"recommended"}>Recommended</MenuItem>
-              <MenuItem value={"lowestPrice"}>Lowest Price</MenuItem>
-              <MenuItem value={"highestPrice"}>Highest Price</MenuItem>
-              <MenuItem value={"highestDiscount"}>Highest Discount</MenuItem>
-            </Select>
-          </FormControl>
+      <Container sx={{ padding: 10 }}>
+        <Box display="flex" flexWrap="wrap">
+          {/* Side Panel */}
+          <Box width={{ xs: "100%", sm: "30%", md: "20%" }} mb={{ xs: 2, sm: 0 }}>
+            <FilterPanel />
+          </Box>
+          {/* Main Content */}
+          <Box width={{ xs: "100%", sm: "70%", md: "80%" }}>
+            <Grid container spacing={2}>
+              <Box sx={{ maxWidth: "30%" }}>
+                <FormControl fullWidth>
+                  <InputLabel>Sort By</InputLabel>
+                  <Select
+                    value={sortBy}
+                    label="Sort By"
+                    onChange={handleChange}
+                    sx={{ backgroundColor: "white" }}
+                  >
+                    <MenuItem value={"recommended"}>Recommended</MenuItem>
+                    <MenuItem value={"lowestPrice"}>Lowest Price</MenuItem>
+                    <MenuItem value={"highestPrice"}>Highest Price</MenuItem>
+                    <MenuItem value={"highestDiscount"}>Highest Discount</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              {fetchedData && <ItemGrid items={fetchedData.item.products} />}
+            </Grid>
+          </Box>
         </Box>
-
-        {fetchedData && <ItemGrid items={fetchedData.item.products}/>}
       </Container>
     </Box>
   );
