@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import ItemCard from "../ItemCard/ItemCard";
 import Box from "@mui/material/Box";
@@ -26,7 +26,7 @@ const ItemGrid = ({ items }: any) => {
   };
 
   return (
-    <Box sx={{ m: 2 }}>
+    <Box sx={{ m: 2}}>
       <Grid container spacing={4}>
         {items.map((item: any) => (
           <ItemCard key={item.id} {...transformDataItemToItemCardProps(item)} />

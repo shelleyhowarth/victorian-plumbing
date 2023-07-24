@@ -35,12 +35,12 @@
                 },
                 "price": {
                     "currencyCode": "GBP",
-                    "wasPriceIncTax": null,
-                    "wasPriceExcTax": null,
+                    "wasPriceIncTax": 237.44,
+                    "wasPriceExcTax": 197.07,
                     "priceIncTax": 189.95,
                     "priceExcTax": 158.29,
                     "isOnPromotion": false,
-                    "discountPercentage": null,
+                    "discountPercentage": 25,
                     "monthlyFinanceEstimate": null
                 },
                 "attributes": {
@@ -564,8 +564,8 @@
                 },
                 "price": {
                     "currencyCode": "GBP",
-                    "wasPriceIncTax": null,
-                    "wasPriceExcTax": null,
+                    "wasPriceIncTax": 389.94,
+                    "wasPriceExcTax": 322.87,
                     "priceIncTax": 299.95,
                     "priceExcTax": 249.96,
                     "isOnPromotion": false,

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import { ItemCardProps } from "../../types";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import CardMedia from "@mui/material/CardMedia";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
@@ -13,7 +12,7 @@ import ResponsiveCardMedia from "../ResponsiveCardMedia/ResponsiveCardMedia";
 
 const ItemCard = (item: ItemCardProps) => {
   return (
-    <Grid xs={12} sm={6} md={4} lg={3}>
+    <Grid xs={12} sm={6} md={4} lg={3} sx={{ paddingLeft: 0 }}>
       <Card
         sx={{
           width: "100%",
@@ -47,9 +46,24 @@ const ItemCard = (item: ItemCardProps) => {
             <FavouriteButton />
           </Stack>
 
-          <Typography sx={{ mb: 1.5, fontWeight: "bold" }} color="red">
-            £{item.priceIncTax}
-          </Typography>
+          <Stack direction="row" spacing={4} alignItems='baseline'>
+            <Typography sx={{ fontSize: 22, fontWeight: "bold", color: "red" }}>
+              £{item.priceIncTax}
+            </Typography>
+
+            {item.wasPriceIncTax && (
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  color: "gray",
+                  textDecoration: "line-through",
+                }}
+              >
+                Was £{item.wasPriceIncTax}
+              </Typography>
+            )}
+          </Stack>
+
           <InStockCheckbox
             stockStatus={item.stockStatus}
             stockEta={item.stockEta}

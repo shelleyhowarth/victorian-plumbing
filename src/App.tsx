@@ -71,7 +71,6 @@ function App() {
           <FormControl fullWidth>
             <InputLabel>Sort By</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
               value={sortBy}
               label="Sort By"
               onChange={handleChange}
