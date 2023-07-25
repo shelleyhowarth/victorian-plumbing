@@ -12,7 +12,7 @@ import ResponsiveCardMedia from "../ResponsiveCardMedia/ResponsiveCardMedia";
 
 const ItemCard = (item: ItemCardProps) => {
   return (
-    <Grid xs={12} sm={6} md={4} lg={4} sx={{ paddingLeft: 0 }}>
+    <Grid xs={12} sm={6} md={3} lg={3} xl={2} sx={{ paddingLeft: 0 }}>
       <Card
         sx={{
           width: "100%",

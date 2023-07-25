@@ -15,14 +15,29 @@ import FilterPanel from "./components/FilterPanel/FilterPanel";
 function App() {
   const [sortBy, setSortBy] = useState("recommended");
   const [fetchedData, setFetchedData] = useState(data);
+  const [filters, setFilters] = useState({
+    minPrice: null,
+    maxPrice: null,
+    selectedBrands: [],
+    onSale: false,
+    inStock: false
+  });
 
   useEffect(() => {
     sortCardItems();
   }, [fetchedData]);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  useEffect( () => {
+    console.log(filters)
+  }, [filters])
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
     setSortBy(event.target.value as string);
     sortCardItems();
+  };
+
+  const handleFilterChange = (updatedFilters: any) => {
+    setFilters(updatedFilters);
   };
 
   const sortCardItems = () => {
@@ -67,11 +82,22 @@ function App() {
   return (
     <Box sx={{ backgroundColor: "#F2F0EA" }}>
       <CssBaseline />
-      <Container sx={{ padding: 10 }}>
-        <Box display="flex" flexWrap="wrap">
+      <Container maxWidth={false} sx={{padding: 5}}>
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          sx={{ justifyContent: "space-between" }}
+        >
           {/* Side Panel */}
-          <Box width={{ xs: "100%", sm: "30%", md: "20%" }} mb={{ xs: 2, sm: 0 }}>
-            <FilterPanel />
+          <Box
+            width={{ xs: "100%", sm: "30%", md: "20%" }}
+            mb={{ xs: 2, sm: 0 }}
+          >
+            <FilterPanel
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              fetchedData={fetchedData.item.products}
+            />
           </Box>
           {/* Main Content */}
           <Box width={{ xs: "100%", sm: "70%", md: "80%" }}>
@@ -82,13 +108,15 @@ function App() {
                   <Select
                     value={sortBy}
                     label="Sort By"
-                    onChange={handleChange}
+                    onChange={handleSelectChange}
                     sx={{ backgroundColor: "white" }}
                   >
                     <MenuItem value={"recommended"}>Recommended</MenuItem>
                     <MenuItem value={"lowestPrice"}>Lowest Price</MenuItem>
                     <MenuItem value={"highestPrice"}>Highest Price</MenuItem>
-                    <MenuItem value={"highestDiscount"}>Highest Discount</MenuItem>
+                    <MenuItem value={"highestDiscount"}>
+                      Highest Discount
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Box>
