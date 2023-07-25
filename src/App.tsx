@@ -11,25 +11,28 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ItemGrid from "./components/ItemGrid/ItemGrid";
 import Grid from "@mui/material/Grid"; // Import the Grid component
 import FilterPanel from "./components/FilterPanel/FilterPanel";
+import { Filters } from "./types";
 
 function App() {
   const [sortBy, setSortBy] = useState("recommended");
   const [fetchedData, setFetchedData] = useState(data);
-  const [filters, setFilters] = useState({
+  const [displayedProducts, setDisplayedProducts] = useState(data);
+
+  const [filters, setFilters] = useState<Filters>({
     minPrice: null,
     maxPrice: null,
     selectedBrands: [],
     onSale: false,
-    inStock: false
+    inStock: false,
   });
 
   useEffect(() => {
     sortCardItems();
-  }, [fetchedData]);
+  }, [displayedProducts]);
 
-  useEffect( () => {
-    console.log(filters)
-  }, [filters])
+  useEffect(() => {
+    filterCardItems();
+  }, [filters]);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     setSortBy(event.target.value as string);
@@ -41,7 +44,7 @@ function App() {
   };
 
   const sortCardItems = () => {
-    const sortedProducts = [...fetchedData.item.products];
+    const sortedProducts = [...displayedProducts.item.products];
 
     if (sortBy === "recommended") {
       sortedProducts.sort(function (x, y) {
@@ -73,16 +76,57 @@ function App() {
       });
     }
 
-    setFetchedData((prevData) => ({
+    setDisplayedProducts((prevData) => ({
       ...prevData,
       item: { ...prevData.item, products: sortedProducts },
+    }));
+  };
+
+  const filterCardItems = () => {
+    let filteredProducts = [...data.item.products];
+
+    // Apply the filters one by one
+    if (filters.minPrice !== null) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price.priceIncTax >= filters.minPrice!
+      );
+    }
+
+    if (filters.maxPrice !== null) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price.priceIncTax <= filters.maxPrice!
+      );
+    }
+
+    if (filters.selectedBrands.length > 0) {
+      filteredProducts = filteredProducts.filter((product) =>
+        filters.selectedBrands.includes(product.brand.name)
+      );
+    }
+
+    if (filters.onSale) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price.discountPercentage! > 0
+      );
+    }
+
+    if (filters.inStock) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.stockStatus.status === "R"
+      );
+    }
+
+    // Update the state with the filtered data
+    setDisplayedProducts((prevData) => ({
+      ...prevData,
+      item: { ...prevData.item, products: filteredProducts },
     }));
   };
 
   return (
     <Box sx={{ backgroundColor: "#F2F0EA" }}>
       <CssBaseline />
-      <Container maxWidth={false} sx={{padding: 5}}>
+      <Container maxWidth={false} sx={{ padding: 5 }}>
         <Box
           display="flex"
           flexWrap="wrap"
@@ -120,7 +164,7 @@ function App() {
                   </Select>
                 </FormControl>
               </Box>
-              {fetchedData && <ItemGrid items={fetchedData.item.products} />}
+              {displayedProducts && <ItemGrid items={displayedProducts.item.products} />}
             </Grid>
           </Box>
         </Box>

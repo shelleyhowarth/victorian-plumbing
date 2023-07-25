@@ -24,30 +24,35 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
 
   const handleFilterChange = (event: any) => {
     const { name, value, type, checked } = event.target;
+
+    let updatedFilters = { ...filters }; // Create a copy of the filters object
+
     if (type === "checkbox") {
-      if (name === "onSale" || name === "availability") {
-        filters[name] = checked;
+      if (name === "onSale") {
+        updatedFilters.onSale = checked;
+      } else if (name === "inStock") {
+        updatedFilters.inStock = checked;
       } else {
         // Handle brand checkboxes
-        const selectedBrands = filters.selectedBrands || [];
+        const selectedBrands = updatedFilters.selectedBrands || [];
 
         if (checked) {
           // Add the brand to the selectedBrands array if it's not already there
-          filters.selectedBrands = [...selectedBrands, value];
+          updatedFilters.selectedBrands = [...selectedBrands, value];
         } else {
           // Remove the brand from the selectedBrands array
-          filters.selectedBrands = selectedBrands.filter(
+          updatedFilters.selectedBrands = selectedBrands.filter(
             (brand: string) => brand !== value
           );
         }
       }
     } else {
       // Handle other input types (e.g., price range)
-      filters[name] = value;
+      updatedFilters[name] = value;
     }
 
     // Call the onFilterChange callback with the updated filters object
-    onFilterChange({ ...filters });
+    onFilterChange(updatedFilters);
   };
 
   return (
@@ -94,8 +99,8 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
         <FormControlLabel
           control={
             <Checkbox
-              name="onSale"
-              checked={filters.onSale}
+              name="inStock"
+              checked={filters.inStock}
               onChange={handleFilterChange}
               size="small"
             />

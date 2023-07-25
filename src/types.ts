@@ -26,3 +26,11 @@ export interface ResponsiveCardMediaProps {
   imageUrl: string;
   aspectRatio: number;
 }
+
+export interface Filters {
+  minPrice: number | null;
+  maxPrice: number | null;
+  selectedBrands: string[]; // Explicitly set the type to an array of strings
+  onSale: boolean;
+  inStock: boolean;
+}
