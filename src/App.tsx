@@ -32,7 +32,6 @@ function App() {
 
   useEffect(() => {
     filterCardItems();
-    console.log(filters);
   }, [filters]);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
