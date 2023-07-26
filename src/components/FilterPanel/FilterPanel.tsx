@@ -4,7 +4,7 @@ import { FormControlLabel, TextField, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-import { FilterPanelProps, Filters } from "../../types";
+import { FilterPanelProps } from "../../types";
 
 const FilterPanel = ({
   filters,
@@ -28,10 +28,10 @@ const FilterPanel = ({
     : [];
 
   const handleFilterChange = (event: SyntheticEvent) => {
-    const { name, value, type, checked } = event.target as HTMLInputElement; // Assert the type to HTMLInputElement
-    let updatedFilters = { ...filters }; // Create a copy of the filters object
+    const { name, value, type, checked } = event.target as HTMLInputElement; 
+    let updatedFilters = { ...filters }; 
 
-    if (type === "checkbox") {
+    if (type === "checkbox") { //Go through all checkbox filters first
       if (name === "onSale") {
         updatedFilters.onSale = checked;
       } else if (name === "inStock") {
@@ -49,7 +49,7 @@ const FilterPanel = ({
           );
         }
       }
-    } else {
+    } else { //Go through price filters
       if (name === "minPrice") {
         updatedFilters.minPrice = value === "" ? null : +value; // Convert empty string to null for minPrice
       } else if (name === "maxPrice") {
