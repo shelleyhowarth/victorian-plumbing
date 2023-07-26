@@ -32,6 +32,7 @@ function App() {
 
   useEffect(() => {
     filterCardItems();
+    console.log(filters);
   }, [filters]);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
@@ -39,7 +40,7 @@ function App() {
     sortCardItems();
   };
 
-  const handleFilterChange = (updatedFilters: any) => {
+  const handleFilterChange = (updatedFilters: Filters) => {
     setFilters(updatedFilters);
   };
 
@@ -85,7 +86,6 @@ function App() {
   const filterCardItems = () => {
     let filteredProducts = [...data.item.products];
 
-    // Apply the filters one by one
     if (filters.minPrice !== null) {
       filteredProducts = filteredProducts.filter(
         (product) => product.price.priceIncTax >= filters.minPrice!
@@ -116,7 +116,6 @@ function App() {
       );
     }
 
-    // Update the state with the filtered data
     setDisplayedProducts((prevData) => ({
       ...prevData,
       item: { ...prevData.item, products: filteredProducts },
@@ -124,50 +123,46 @@ function App() {
   };
 
   return (
-    <Box sx={{ backgroundColor: "#F2F0EA" }}>
+    <Box sx={{ backgroundColor: "#F2F0EA", minHeight: '100vh', height: "100%" }}>
       <CssBaseline />
       <Container maxWidth={false} sx={{ padding: 5 }}>
-        <Box
-          display="flex"
-          flexWrap="wrap"
-          sx={{ justifyContent: "space-between" }}
-        >
+        <Grid container spacing={2}>
           {/* Side Panel */}
-          <Box
-            width={{ xs: "100%", sm: "30%", md: "20%" }}
-            mb={{ xs: 2, sm: 0 }}
-          >
+          <Grid item xs={12} sm={4} md={3} lg={3}>
             <FilterPanel
               filters={filters}
               onFilterChange={handleFilterChange}
               fetchedData={fetchedData.item.products}
             />
-          </Box>
+          </Grid>
           {/* Main Content */}
-          <Box width={{ xs: "100%", sm: "70%", md: "80%" }}>
-            <Grid container spacing={2}>
-              <Box sx={{ maxWidth: "30%" }}>
-                <FormControl fullWidth>
-                  <InputLabel>Sort By</InputLabel>
-                  <Select
-                    value={sortBy}
-                    label="Sort By"
-                    onChange={handleSelectChange}
-                    sx={{ backgroundColor: "white" }}
-                  >
-                    <MenuItem value={"recommended"}>Recommended</MenuItem>
-                    <MenuItem value={"lowestPrice"}>Lowest Price</MenuItem>
-                    <MenuItem value={"highestPrice"}>Highest Price</MenuItem>
-                    <MenuItem value={"highestDiscount"}>
-                      Highest Discount
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              {displayedProducts && <ItemGrid items={displayedProducts.item.products} />}
-            </Grid>
-          </Box>
-        </Box>
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={9}
+            lg={9}
+            sx={{ display: "flex", flexDirection: "column" }}
+          >
+            <FormControl fullWidth>
+              <InputLabel>Sort By</InputLabel>
+              <Select
+                value={sortBy}
+                label="Sort By"
+                onChange={handleSelectChange}
+                sx={{ backgroundColor: "white", width: '30%' }}
+              >
+                <MenuItem value={"recommended"}>Recommended</MenuItem>
+                <MenuItem value={"lowestPrice"}>Lowest Price</MenuItem>
+                <MenuItem value={"highestPrice"}>Highest Price</MenuItem>
+                <MenuItem value={"highestDiscount"}>Highest Discount</MenuItem>
+              </Select>
+            </FormControl>
+            {displayedProducts && (
+              <ItemGrid items={displayedProducts.item.products} />
+            )}
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );

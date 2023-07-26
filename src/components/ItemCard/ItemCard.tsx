@@ -9,10 +9,11 @@ import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import InStockCheckbox from "../InStockCheckbox/InStockCheckbox";
 import FavouriteButton from "../FavouriteButton/FavouriteButton";
 import ResponsiveCardMedia from "../ResponsiveCardMedia/ResponsiveCardMedia";
+import { CardMedia } from "@mui/material";
 
 const ItemCard = (item: ItemCardProps) => {
   return (
-    <Grid xs={12} sm={6} md={3} lg={3} xl={2} sx={{ paddingLeft: 0 }}>
+    <Grid xs={12} sm={6} md={4} lg={3} xl={3} sx={{ paddingLeft: 0 }}>
       <Card
         sx={{
           width: "100%",
@@ -25,6 +26,12 @@ const ItemCard = (item: ItemCardProps) => {
         }}
       >
         <ResponsiveCardMedia imageUrl={item.itemImageUrl} aspectRatio={100} />
+        <CardMedia
+            component="img"
+            image={item.brandImageUrl}
+            alt={item.brandImageAltText}
+            sx={{width: '25%'}}
+          />
         <CardContent>
           <Stack direction="row" justifyContent="space-between">
               <Typography

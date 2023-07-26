@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent } from "react";
 import Box from "@mui/material/Box";
-import { Button, FormControlLabel, TextField, Typography } from "@mui/material";
+import { FormControlLabel, TextField, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Checkbox from "@mui/material/Checkbox";
+import Divider from "@mui/material/Divider";
+import { FilterPanelProps, Filters } from "../../types";
 
-// TODO: Type the props
-const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
+const FilterPanel = ({
+  filters,
+  onFilterChange,
+  fetchedData,
+}: FilterPanelProps) => {
   // Get unique brand names using an array and checking for duplicates
   const uniqueBrandsArray = fetchedData
     ? fetchedData
@@ -22,9 +27,8 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
         .sort() //Sorts alphabetically
     : [];
 
-  const handleFilterChange = (event: any) => {
-    const { name, value, type, checked } = event.target;
-
+  const handleFilterChange = (event: SyntheticEvent) => {
+    const { name, value, type, checked } = event.target as HTMLInputElement; // Assert the type to HTMLInputElement
     let updatedFilters = { ...filters }; // Create a copy of the filters object
 
     if (type === "checkbox") {
@@ -33,32 +37,40 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
       } else if (name === "inStock") {
         updatedFilters.inStock = checked;
       } else {
-        // Handle brand checkboxes
-        const selectedBrands = updatedFilters.selectedBrands || [];
+        const selectedBrands = updatedFilters.selectedBrands;
 
         if (checked) {
-          // Add the brand to the selectedBrands array if it's not already there
+          // Checking what brands have been checked and putting them into the selectedBrands array
           updatedFilters.selectedBrands = [...selectedBrands, value];
         } else {
-          // Remove the brand from the selectedBrands array
           updatedFilters.selectedBrands = selectedBrands.filter(
-            (brand: string) => brand !== value
+            // Checking what brands haven't been checked and removing them from the selectedBrands array
+            (brand) => brand !== value
           );
         }
       }
     } else {
-      // Handle other input types (e.g., price range)
-      updatedFilters[name] = value;
+      if (name === "minPrice") {
+        updatedFilters.minPrice = value === "" ? null : +value; // Convert empty string to null for minPrice
+      } else if (name === "maxPrice") {
+        updatedFilters.maxPrice = value === "" ? null : +value; // Convert empty string to null for maxPrice
+      }
     }
 
-    // Call the onFilterChange callback with the updated filters object
     onFilterChange(updatedFilters);
   };
 
   return (
     <>
       <Typography variant="h6">Filter By</Typography>
-      <Box sx={{ backgroundColor: "white", height: "100%", mr: 5, padding: 2 }}>
+      <Box
+        sx={{
+          backgroundColor: "white",
+          height: "auto",
+          padding: 2,
+          width: "80%",
+        }}
+      >
         <Typography variant="h6">Price</Typography>
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -70,7 +82,7 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
             value={filters.minPrice}
             onChange={handleFilterChange}
             placeholder="Min"
-            sx={{ width: "30%" }}
+            sx={{ width: "35%" }}
           />
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
             to
@@ -81,19 +93,12 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
             value={filters.maxPrice}
             onChange={handleFilterChange}
             placeholder="Max"
-            sx={{ width: "30%" }}
+            sx={{ width: "35%" }}
           />
-          {/* <Button
-            sx={{
-              backgroundColor: "gray",
-              width: "20%",
-              height: "30%",
-              color: "white",
-            }}
-          >
-            Go
-          </Button> */}
         </Stack>
+
+        <Divider sx={{ my: 1 }} />
+
         <Typography variant="h6">Availability</Typography>
 
         <FormControlLabel
@@ -107,6 +112,8 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
           }
           label="In Stock"
         />
+        <Divider sx={{ my: 1 }} />
+
         <Typography variant="h6">On Sale</Typography>
 
         <FormControlLabel
@@ -120,6 +127,8 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
           }
           label="Yes"
         />
+        <Divider sx={{ my: 1 }} />
+
         <Typography variant="h6">Brand</Typography>
         <Stack direction={"column"}>
           {uniqueBrandsArray.map((brandName: string) => (
@@ -129,7 +138,7 @@ const FilterPanel = ({ filters, onFilterChange, fetchedData }: any) => {
                 <Checkbox
                   name="selectedBrands"
                   value={brandName}
-                  //   checked={filters.selectedBrands.includes(brandName)}
+                  checked={filters.selectedBrands.includes(brandName)}
                   onChange={handleFilterChange}
                   size="small"
                 />

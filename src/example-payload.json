@@ -480,7 +480,7 @@
                     "priceIncTax": 209.9500,
                     "priceExcTax": 174.9600,
                     "isOnPromotion": false,
-                    "discountPercentage": 20,
+                    "discountPercentage": null,
                     "monthlyFinanceEstimate": null
                 },
                 "attributes": {

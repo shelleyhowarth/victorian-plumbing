@@ -30,7 +30,19 @@ export interface ResponsiveCardMediaProps {
 export interface Filters {
   minPrice: number | null;
   maxPrice: number | null;
-  selectedBrands: string[]; // Explicitly set the type to an array of strings
+  selectedBrands: string[]; 
   onSale: boolean;
   inStock: boolean;
+}
+
+export interface FilterPanelProps {
+  filters: Filters;
+  onFilterChange: (updatedFilters: {
+    minPrice: number | null;
+    maxPrice: number | null;
+    selectedBrands: string[];
+    onSale: boolean;
+    inStock: boolean;
+  }) => void;
+  fetchedData: any[];
 }
